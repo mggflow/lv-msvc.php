@@ -21,7 +21,7 @@ class MakeErrorsRender
 
         $exceptions = AccumulateException::getAccumulated();
 
-        $showSensitive = !config('debug', false);
+        $showSensitive = !config('app.debug', false);
 
         return array_map(function ($exception) use ($showSensitive) {
             if (method_exists($exception, 'toArray')) {
