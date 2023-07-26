@@ -23,7 +23,6 @@ class ResponseEncoder
      */
     public function __construct(ResponseFactory $factory)
     {
-        $this->factory = $factory;
     }
 
 

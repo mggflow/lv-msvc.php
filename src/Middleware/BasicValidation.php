@@ -16,7 +16,6 @@ class BasicValidation
      * @var array
      */
     protected array $rules = [
-        'msvc' => ['required', 'string', 'max:32'],
         'msvc_access_key' => ['alpha_num', 'max:64'],
     ];
 
@@ -28,7 +27,7 @@ class BasicValidation
      * @return mixed
      * @throws UniException
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): mixed
     {
         $this->validateRequestData($request->all());
 
@@ -39,7 +38,7 @@ class BasicValidation
      * @param array $data
      * @throws UniException
      */
-    protected function validateRequestData(array $data)
+    protected function validateRequestData(array $data): void
     {
         $validator = Validator::make($data, $this->rules);
 

@@ -4,22 +4,24 @@ namespace MGGFLOW\LVMSVC\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class MsvcAuthentication
 {
+    protected string $accessKeyCacheKey = 'msvc_access_key';
     /**
      * Name of service connection
      *
      * @var string
      */
-    protected string $connectionName = 'msvc';
+    protected string $connectionName;
     /**
      * Table name for microservices map table
      *
      * @var string
      */
-    protected string $accessTableName = 'access';
+    protected string $accessTableName;
     /**
      * Database facade.
      *
@@ -50,7 +52,9 @@ class MsvcAuthentication
     {
         $this->db = $dbFacade;
 
-        $this->currentMsvcName = config('msvc.name', 'msvc');
+        $this->connectionName = config('database.msvc_default', 'msvc');
+        $this->accessTableName = config('app.msvc_access_table_name', 'access');
+        $this->currentMsvcName = config('app.name', 'msvc');
     }
 
     /**
@@ -60,13 +64,16 @@ class MsvcAuthentication
      * @param Closure $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): mixed
     {
-        $requestAccessKey = $this->parseAccessKey($request);
+        $requestAccessKey = $request->input($this->msvcRequestAccessKey);
 
-        if($requestAccessKey){
+        if ($requestAccessKey) {
             $selfAccessKey = $this->getSelfAccessKey();
-            $this->provideAuthenticated($requestAccessKey,$selfAccessKey,$request);
+
+            if ($selfAccessKey and $requestAccessKey == $selfAccessKey) {
+                $request->merge(['msvc_authenticated' => true]);
+            }
         }
 
 
@@ -74,42 +81,24 @@ class MsvcAuthentication
     }
 
     /**
-     * Parse access key from request
-     *
-     * @param Request $request
-     * @return mixed
-     */
-    protected function parseAccessKey(Request $request){
-        return $request->input($this->msvcRequestAccessKey,false);
-    }
-
-    /**
      * Find microservice Access key in DB
      *
-     * @return false|mixed
+     * @return ?string
      */
-    protected function getSelfAccessKey(){
+    protected function getSelfAccessKey(): ?string
+    {
+        if (Cache::has($this->accessKeyCacheKey)){
+            return Cache::get($this->accessKeyCacheKey);
+        }
+
         $access = $this->db::connection($this->connectionName)->table($this->accessTableName)
             ->where('name', '=', $this->currentMsvcName)
             ->first();
 
-        if(empty($access)) return false;
+        if (empty($access)) return null;
+        $accessKey = $access->access_key;
+        Cache::put($this->accessKeyCacheKey, $accessKey, now()->addHours(7));
 
-        return $access->access_key;
+        return $accessKey;
     }
-
-    /**
-     * Set authenticated state if keys equal
-     *
-     * @param $requestAccessKey
-     * @param $selfAccessKey
-     * @param Request $request
-     */
-    protected function provideAuthenticated($requestAccessKey,$selfAccessKey,Request $request){
-        if($selfAccessKey and $requestAccessKey==$selfAccessKey){
-            $request->merge(['msvc_authenticated'=>true]);
-        }
-    }
-
-
 }

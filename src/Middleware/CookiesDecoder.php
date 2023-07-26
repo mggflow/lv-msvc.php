@@ -24,7 +24,7 @@ class CookiesDecoder
      * @param Closure $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): mixed
     {
         $this->decodeSomeRequestCookies($request);
 
@@ -36,7 +36,7 @@ class CookiesDecoder
      *
      * @param Request $request
      */
-    protected function decodeSomeRequestCookies(Request $request)
+    protected function decodeSomeRequestCookies(Request $request): void
     {
         foreach ($this->json as $key) {
             if ($request->cookies->has($key)) {

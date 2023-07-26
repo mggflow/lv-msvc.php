@@ -14,7 +14,7 @@ class ConfigureRateLimiting
     public static function configure()
     {
         RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(config('msvc.max_requests_per_minute', self::DEFAULT_MAX_REQUESTS_PER_MINUTE))
+            return Limit::perMinute(config('app.max_requests_per_minute', self::DEFAULT_MAX_REQUESTS_PER_MINUTE))
                 ->by(self::genRequestKey($request))->response(function () {
                     throw ManageException::build()
                         ->log()->warning()->b()
