@@ -9,7 +9,7 @@ use MGGFLOW\ExceptionManager\ManageException;
 
 class ConfigureRateLimiting
 {
-    const DEFAULT_MAX_REQUESTS_PER_MINUTE = 128;
+    const int DEFAULT_MAX_REQUESTS_PER_MINUTE = 128;
 
     public static function configure()
     {

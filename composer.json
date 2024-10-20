@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "laravel/framework": "^10.10",
+        "laravel/framework": ">=10.10",
         "mggflow/exception-manager": "^3.3",
         "ext-pdo": "*"
     }
