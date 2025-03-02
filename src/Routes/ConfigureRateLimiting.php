@@ -11,7 +11,7 @@ class ConfigureRateLimiting
 {
     const int DEFAULT_MAX_REQUESTS_PER_MINUTE = 128;
 
-    public static function configure()
+    public static function configure(): void
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(config('app.max_requests_per_minute', self::DEFAULT_MAX_REQUESTS_PER_MINUTE))
