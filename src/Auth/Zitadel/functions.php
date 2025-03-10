@@ -88,7 +88,7 @@ if (!function_exists('MGGFLOW\LVMSVC\Auth\Zitadel\introspect_token_via_basic_aut
             return null;
         }
 
-        if (!$config->introspectionUrl) {
+        if (empty($config->introspectionUrl)) {
             return null;
         }
 
@@ -115,10 +115,14 @@ if (!function_exists('MGGFLOW\LVMSVC\Auth\Zitadel\gen_app_auth_JWT')) {
      * Generate msvc JWT token for introspection.
      * @param Config $config
      * @param int $duration
-     * @return string
+     * @return string|null
      */
-    function gen_app_auth_JWT(Config $config, int $duration = 60 * 60): string
+    function gen_app_auth_JWT(Config $config, int $duration = 60 * 60): ?string
     {
+        if (empty($config->JWTPrivateKeyData)) {
+            return null;
+        }
+
         $payload = [
             'iss' => $config->JWTPrivateKeyData->clientId,
             'sub' => $config->JWTPrivateKeyData->clientId,
