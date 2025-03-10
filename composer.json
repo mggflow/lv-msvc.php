@@ -1,23 +1,24 @@
 {
-    "name": "mggflow/lv-msvc",
-    "type": "library",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "MGGFLOW\\LVMSVC\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "Pavel Eliseev",
-            "email": "deusagnis@gmail.com",
-            "homepage": "https://finwax.in",
-            "role": "Developer"
-        }
-    ],
-    "require": {
-        "laravel/framework": ">=10.10",
-        "mggflow/exception-manager": "^3.3.1",
-        "ext-pdo": "*"
+  "name": "mggflow/lv-msvc",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "MGGFLOW\\LVMSVC\\": "src/"
     }
+  },
+  "authors": [
+    {
+      "name": "Pavel Eliseev",
+      "email": "deusagnis@gmail.com",
+      "homepage": "https://finwax.in",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "laravel/framework": ">=12.1.1",
+    "mggflow/exception-manager": "^3.3.1",
+    "ext-pdo": "*",
+    "firebase/php-jwt": "^6.11"
+  }
 }
