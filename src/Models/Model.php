@@ -29,5 +29,11 @@ class Model extends EloquentModel
                 $model->setCreatedAt($model->freshTimestamp()->format($model->getDateFormat()));
             }
         });
+
+        static::updating(function ($model) {
+            if ($model->customTimestamps) {
+                $model->setUpdatedAt($model->freshTimestamp()->format($model->getDateFormat()));
+            }
+        });
     }
 }
