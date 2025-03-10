@@ -5,7 +5,11 @@
   "autoload": {
     "psr-4": {
       "MGGFLOW\\LVMSVC\\": "src/"
-    }
+    },
+    "files": [
+      "src/Auth/Zitadel/functions.php",
+      "src/FileSystem/functions.php"
+    ]
   },
   "authors": [
     {
