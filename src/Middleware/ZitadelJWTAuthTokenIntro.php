@@ -24,7 +24,7 @@ class ZitadelJWTAuthTokenIntro
     {
         $token = $request->bearerToken();
 
-        $cacheKey = 'bearerToken_' . str($token);
+        $cacheKey = 'bearerToken_' . $token;
 
         $config = config('auth.zitadel_config', new Config);
         $intro = Cache::remember($cacheKey, $config->tokenIntrospectionPeriod, function () use ($token, $config) {
