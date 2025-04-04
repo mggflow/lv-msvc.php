@@ -18,6 +18,7 @@ class Config
         public ?string         $personalAccessToken = null,
         public int             $tokenIntrospectionPeriod = 90,
         public string          $JWTKeyAlgorithm = 'RS256',
+        public bool            $introAssoc = true,
     )
     {
     }

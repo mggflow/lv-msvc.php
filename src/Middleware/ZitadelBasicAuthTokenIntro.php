@@ -27,7 +27,7 @@ class ZitadelBasicAuthTokenIntro
 
         $config = config('auth.zitadel_config', new Config);
         $intro = Cache::remember($cacheKey, $config->tokenIntrospectionPeriod, function () use ($token, $config) {
-            return introspect_token_via_basic_auth($token, $config, true);
+            return introspect_token_via_basic_auth($token, $config, $config->introAssoc);
         });
         validate_intro($intro);
 
