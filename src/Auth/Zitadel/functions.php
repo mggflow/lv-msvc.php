@@ -17,12 +17,16 @@ if (!function_exists('MGGFLOW\LVMSVC\Auth\Zitadel\validate_intro')) {
      */
     function validate_intro($intro): void
     {
+        if (is_object($intro)) {
+            $intro = (array)$intro;
+        }
         if (empty($intro)) {
             throw ManageException::build()
                 ->log()->error()->b()
                 ->desc()->no(null, 'Token')->b()
                 ->fill();
         }
+
         if (empty($intro['active'])) {
             throw ManageException::build()
                 ->log()->error()->b()
