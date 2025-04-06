@@ -8,6 +8,29 @@ use GuzzleHttp\Exception\GuzzleException;
 use MGGFLOW\ExceptionManager\Interfaces\UniException;
 use MGGFLOW\ExceptionManager\ManageException;
 
+if (!function_exists('MGGFLOW\LVMSVC\Auth\Zitadel\find_user_via_service_pat')) {
+
+    function find_user_via_service_pat($userId, Config $config, $assoc = false)
+    {
+        if (!$config->authDomain or !$config->personalAccessToken) return null;
+
+        $url = "{$config->authDomain}/v2/users/{$userId}";
+        $headers = [
+            'Authorization' => 'Bearer ' . $config->personalAccessToken,
+            'Content-Type' => 'application/json',
+        ];
+
+        $client = new Client();
+        $response = $client->get($url, ['headers' => $headers, 'http_errors' => false]);
+
+        if ($response->getStatusCode() === 200) {
+            return json_decode($response->getBody()->getContents(), $assoc);
+        }
+
+        return null;
+    }
+}
+
 if (!function_exists('MGGFLOW\LVMSVC\Auth\Zitadel\validate_intro')) {
     /**
      * Validate token introspection result.
